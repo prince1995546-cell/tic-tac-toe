@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Neon Tic Tac Toe</title>
+<style>
+body{margin:0;font-family:Arial;background:linear-gradient(180deg,#1b0050,#120022);display:flex;justify-content:center;align-items:center;height:100vh;color:#fff}
+#home,#game{width:100%;max-width:420px;text-align:center}
+button{padding:15px 30px;font-size:22px;border:none;border-radius:12px;background:#00d9ff;color:#000;font-weight:bold}
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:15px}
+.cell{aspect-ratio:1;border:2px solid #00eaff;border-radius:10px;font-size:64px;display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 0 12px #00eaff}
+</style>
+</head><body>
+<div id="home"><h1>START GAME</h1><button onclick="start()">Start Game</button></div>
+<div id="game" style="display:none">
+<h2><span id="status">Your Turn (O)</span></h2>
+<div class="board" id="board"></div>
+<button onclick="location.reload()">Restart</button>
+</div>
+<script>
+let b=["","","","","","","","",""],over=false;
+function start(){home.style.display="none";game.style.display="block";draw();}
+function draw(){
+board.innerHTML="";
+b.forEach((v,i)=>{
+let d=document.createElement("div");
+d.className="cell";d.textContent=v;
+d.onclick=()=>move(i);board.appendChild(d);});
+}
+const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+function check(p){return wins.some(w=>w.every(i=>b[i]==p));}
+function move(i){
+if(over||b[i])return;
+b[i]="O"; if(check("O")){status.textContent="You Win";over=true;draw();return;}
+if(b.every(x=>x)){status.textContent="Draw";over=true;draw();return;}
+let e=b.map((v,i)=>v==""?i:null).filter(v=>v!=null);
+let ai=e[Math.floor(Math.random()*e.length)];
+b[ai]="X";
+if(check("X")){status.textContent="AI Wins";over=true;}
+else if(b.every(x=>x)){status.textContent="Draw";over=true;}
+draw();
+}
+</script>
+</body></html>
